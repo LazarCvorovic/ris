@@ -1,0 +1,1 @@
+Projekt za razvoj spletne aplikacije za iskanje izvajalcev različnih gradbenih in vzdrževalnih del je zasnovan z namenom poenostavitve in pospešitve povezovanja iskalcev izvajalcev ter samih izvajalcev. Aplikacija bo omogočala iskalcem hitro in učinkovito iskanje izvajalcev za obnovo stanovanj ali hiš, izvajalcem pa enostavno pridobivanje novih strank.
