@@ -67,4 +67,10 @@ public class OglasController {
         LocalDate datumOdDate = LocalDate.parse(datumOd);
         return oglasService.findByRegijaAndDatumOdAfterAndOtkazano(regija, datumOdDate, otkazano);
     }
+
+    // TX kompleksnejša poizvedba z dvema parametroma
+    @GetMapping("/searchByMestoAndOtkazano")
+    public List<Oglas> findByMestoAndOtkazano(@RequestParam String mesto, @RequestParam boolean otkazano) {
+        return oglasService.findByMestoAndOtkazano(mesto, otkazano);
+    }
 }

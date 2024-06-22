@@ -59,4 +59,8 @@ public class OglasService {
     public List<Oglas> findByRegijaAndDatumOdAfterAndOtkazano(String regija, LocalDate datumOd, boolean otkazano) {
         return oglasRepository.findByRegijaAndDatumOdAfterAndOtkazano(regija, datumOd, otkazano);
     }
+
+    public List<Oglas> findByMestoAndOtkazano(String mesto, boolean otkazano) {
+        return oglasRepository.findByMestoAndOtkazano(mesto, otkazano);
+    }
 }
