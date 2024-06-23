@@ -84,4 +84,5 @@ public class UporabnikService {
     public List<Uporabnik> findByEmail(String email){
         return uporabnikRepository.findByEmail(email);
     }
+
 }

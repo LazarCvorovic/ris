@@ -49,4 +49,8 @@ public class OcenaService {
     public List<Ocena> findByAdresaAndVrednost(String adresa, int vrednost) {
         return ocenaRepository.findByAdresaAndVrednost(adresa, vrednost);
     }
+
+    public List<Ocena> getOcenasByImeVrednostAndNaziv(String ime, int vrednost, String naziv) {
+        return ocenaRepository.findByImeVrednostAndNaziv(ime, vrednost, naziv);
+    }
 }

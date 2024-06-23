@@ -9,8 +9,11 @@ public class Lokacija {
     private Long idLokacija;
 
     private String mesto;
-
     private int postnaStevilka;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idTipLokacije")
+    private Tip_lokacije tipLokacije;
 
     // Getters and Setters
 
@@ -36,5 +39,13 @@ public class Lokacija {
 
     public void setPostnaStevilka(int postnaStevilka) {
         this.postnaStevilka = postnaStevilka;
+    }
+
+    public Tip_lokacije getTipLokacije() {
+        return tipLokacije;
+    }
+
+    public void setTipLokacije(Tip_lokacije tipLokacije) {
+        this.tipLokacije = tipLokacije;
     }
 }

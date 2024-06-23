@@ -14,7 +14,17 @@ public class Tip_lokacije {
 
         private String opis;
 
+        private int povrsina;
+
         // Getters and Setters
+
+        public int getPovrsina() {
+            return povrsina;
+        }
+
+        public void setPovrsina(int povrsina) {
+            this.povrsina = povrsina;
+        }
 
         public Long getIdTipLokacije() {
             return idTipLokacije;

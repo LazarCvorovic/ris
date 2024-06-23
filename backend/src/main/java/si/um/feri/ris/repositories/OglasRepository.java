@@ -19,4 +19,13 @@ public interface OglasRepository extends JpaRepository<Oglas, Long> {
     @Query("SELECT o FROM Oglas o WHERE o.lokacija.mesto = :mesto AND o.otkazano = :otkazano")
     List<Oglas> findByMestoAndOtkazano(@Param("mesto") String mesto, @Param("otkazano") boolean otkazano);
 
+    @Query("SELECT o FROM Oglas o " +
+            "JOIN FETCH o.lokacija l " +
+            "JOIN FETCH l.tipLokacije t " +
+            "WHERE t.povrsina >= :povrsina " +
+            "AND l.mesto = :mesto " +
+            "AND o.naslov LIKE %:naslov%")
+    List<Oglas> findByPovrsinaMestoAndNaslov(int povrsina, String mesto, String naslov);
 }
+
+

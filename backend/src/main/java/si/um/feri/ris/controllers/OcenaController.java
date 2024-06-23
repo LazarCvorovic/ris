@@ -58,4 +58,12 @@ public class OcenaController {
     public List<Ocena> findByAdresaAndVrednost(@RequestParam String adresa, @RequestParam int vrednost) {
         return ocenaService.findByAdresaAndVrednost(adresa, vrednost);
     }
+
+    // 2.TX kompleksnejša poizvedba z tri modela
+    @GetMapping("/ocene")
+    public List<Ocena> getOcenas(@RequestParam String ime,
+                                 @RequestParam int vrednost,
+                                 @RequestParam String naziv) {
+        return ocenaService.getOcenasByImeVrednostAndNaziv(ime, vrednost, naziv);
+    }
 }

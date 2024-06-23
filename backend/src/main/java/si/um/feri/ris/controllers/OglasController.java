@@ -1,11 +1,13 @@
 package si.um.feri.ris.controllers;
 
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import si.um.feri.ris.models.Oglas;
 import si.um.feri.ris.services.OglasService;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,11 +32,7 @@ public class OglasController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TX dodajanje zapisa (POST)
-    @PostMapping
-    public Oglas createOglas(@RequestBody Oglas oglas) {
-        return oglasService.createOglas(oglas);
-    }
+
 
     // TX spreminjanje podatkov zapisa (PUT)
     @PutMapping("/{id}")
@@ -72,5 +70,19 @@ public class OglasController {
     @GetMapping("/searchByMestoAndOtkazano")
     public List<Oglas> findByMestoAndOtkazano(@RequestParam String mesto, @RequestParam boolean otkazano) {
         return oglasService.findByMestoAndOtkazano(mesto, otkazano);
+    }
+
+    @PostMapping("/pdf")
+    public ResponseEntity<Oglas> createOglas(@RequestBody Oglas oglas) throws DocumentException, IOException {
+        oglasService.createOglasAndGeneratePdf(oglas);
+        return ResponseEntity.ok(oglas);
+    }
+
+    // 3.TX kompleksnejša poizvedba z tri modela
+    @GetMapping("/oglasi")
+    public List<Oglas> getOglasi(@RequestParam int povrsina,
+                                 @RequestParam String mesto,
+                                 @RequestParam String naslov) {
+        return oglasService.getOglasByPovrsinaMestoAndNaslov(povrsina, mesto, naslov);
     }
 }
