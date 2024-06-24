@@ -66,4 +66,6 @@ public class OcenaController {
                                  @RequestParam String naziv) {
         return ocenaService.getOcenasByImeVrednostAndNaziv(ime, vrednost, naziv);
     }
+
+
 }

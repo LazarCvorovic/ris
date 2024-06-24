@@ -23,6 +23,12 @@ public class Oglas {
     @JoinColumn(name = "lokacija_idLokacija")
     private Lokacija lokacija;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uporabnik_idUporabnik")
+    private Uporabnik uporabnik; // Dodano polje za korisnika koji je kreirao oglas
+
+
+
     // Getters and Setters
 
     public Long getIdOglas() {
@@ -111,5 +117,13 @@ public class Oglas {
 
     public void setLokacija(Lokacija lokacija) {
         this.lokacija = lokacija;
+    }
+
+    public Uporabnik getUporabnik() {
+        return uporabnik;
+    }
+
+    public void setUporabnik(Uporabnik uporabnik) {
+        this.uporabnik = uporabnik;
     }
 }

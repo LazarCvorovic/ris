@@ -16,6 +16,15 @@ public class Uporabnik {
     private boolean oglasavanje;
     private String email;
     private String geslo;
+    private boolean isAdmin;  // Novo polje za administratorsku ulogu
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
 
     public Long getIdUporabnik() {
         return idUporabnik;

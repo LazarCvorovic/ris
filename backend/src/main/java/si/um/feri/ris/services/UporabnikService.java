@@ -1,5 +1,6 @@
 package si.um.feri.ris.services;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import si.um.feri.ris.models.Uporabnik;
@@ -53,14 +54,12 @@ public class UporabnikService {
         return uporabnikRepository.findByImeAndPriimekAndOglasavanje(ime, priimek, oglasavanje);
     }
 
-    public Uporabnik authenticate(String email, String geslo) throws Exception {
-        List<Uporabnik> u = uporabnikRepository.findByEmailAndGeslo(email,geslo);
-        if (!u.isEmpty()){
-            Uporabnik uporabnik = u.get(0);
-
+    public Optional<Uporabnik> authenticate(String email, String geslo) throws Exception {
+        Optional<Uporabnik> uporabnik = uporabnikRepository.findByEmailAndGeslo(email, geslo);
+        if (uporabnik.isPresent()) {
             return uporabnik;
         }
-        throw new Exception("Not authorise");
+        throw new Exception("Not authorized");
     }
 
     public Uporabnik save(AddUporabnikRequest uporabnik) {
@@ -75,14 +74,32 @@ public class UporabnikService {
         return uporabnikRepository.saveAndFlush(u);
     }
 
-    public Uporabnik findByEmailAndGeslo(String email, String geslo) {
-        List<Uporabnik> u = uporabnikRepository.findByEmailAndGeslo(email, geslo);
-        return u.isEmpty() ? null : u.get(0);
+    public Optional<Uporabnik> findByEmailAndGeslo(String email, String geslo) {
+        return uporabnikRepository.findByEmailAndGeslo(email, geslo);
     }
 
-
-    public List<Uporabnik> findByEmail(String email){
+    public Optional<Uporabnik> findByEmail(String email) {
         return uporabnikRepository.findByEmail(email);
     }
 
+    public boolean isAdmin(String email) {
+        Optional<Uporabnik> uporabnik = findByEmail(email);
+        return uporabnik.isPresent() && uporabnik.get().isAdmin();
+    }
+
+    @PostConstruct
+    public void init() {
+        if (uporabnikRepository.findByEmail("ekipa2.lazar@gmail.com").isEmpty()) {
+            Uporabnik admin = new Uporabnik();
+            admin.setIme("Admin");
+            admin.setPriimek("Admin");
+            admin.setAdresa("Admin Adresa");
+            admin.setTelefonskaStevilka("000000000");
+            admin.setOglasavanje(false);
+            admin.setEmail("ekipa2.lazar@gmail.com");
+            admin.setGeslo("lazarcvorovic");
+            admin.setAdmin(true);
+            uporabnikRepository.save(admin);
+        }
+    }
 }

@@ -12,7 +12,9 @@ import si.um.feri.ris.services.UporabnikService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/uporabniki")
 public class UporabnikController {
@@ -72,12 +74,13 @@ public class UporabnikController {
 
     @PostMapping("/login/{email}/{geslo}")
     public ResponseEntity<Map<String, String>> login(@PathVariable String email, @PathVariable String geslo, HttpServletResponse response) throws Exception {
-        Uporabnik u = uporabnikService.authenticate(email, geslo);
-        if (u != null) {
+        Optional<Uporabnik> uporabnik = uporabnikService.authenticate(email, geslo);
+        if (uporabnik.isPresent()) {
             Map<String, String> responseBody = new HashMap<>();
-            responseBody.put("id", String.valueOf(u.getIdUporabnik()));
-            responseBody.put("email", u.getEmail());
+            responseBody.put("id", String.valueOf(uporabnik.get().getIdUporabnik()));
+            responseBody.put("email", uporabnik.get().getEmail());
             responseBody.put("message", "Uspješna prijava");
+            responseBody.put("isAdmin", String.valueOf(uporabnik.get().isAdmin()));
             return new ResponseEntity<>(responseBody, HttpStatus.OK);
         } else {
             Map<String, String> responseBody = new HashMap<>();
@@ -87,8 +90,18 @@ public class UporabnikController {
     }
 
     @GetMapping("/email/{email}")
-    public List<Uporabnik> findByEmail(@PathVariable String email){
-        return uporabnikService.findByEmail(email);
+    public ResponseEntity<Uporabnik> findByEmail(@PathVariable String email) {
+        Optional<Uporabnik> uporabnik = uporabnikService.findByEmail(email);
+        return uporabnik.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/isAdmin/{email}")
+    public ResponseEntity<Boolean> isAdmin(@PathVariable String email) {
+        boolean isAdmin = uporabnikService.isAdmin(email);
+        return ResponseEntity.ok(isAdmin);
+    }
+
+
 
 }

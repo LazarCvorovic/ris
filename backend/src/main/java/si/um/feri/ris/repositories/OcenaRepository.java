@@ -19,4 +19,6 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
             "AND o.vrednost = :vrednost " +
             "AND p.naziv LIKE %:naziv%")
     List<Ocena> findByImeVrednostAndNaziv(String ime, int vrednost, String naziv);
+
+
 }
