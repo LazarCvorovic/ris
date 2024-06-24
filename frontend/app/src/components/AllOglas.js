@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import oglasService from '../services/oglasService';
 import uporabnikService from '../services/uporabnikService';
+import ocenaService from '../services/ocenaService';
 import '../css/AllOglas.css';
 
 const AllOglas = () => {
@@ -15,6 +16,10 @@ const AllOglas = () => {
     const [error, setError] = useState('');
     const [isAdmin, setIsAdmin] = useState(false);
     const userEmail = localStorage.getItem('email');
+    const userId = localStorage.getItem('userId');
+    const userIme = localStorage.getItem('userIme');
+    const userPriimek = localStorage.getItem('userPriimek');
+    const [ocene, setOcene] = useState({});
 
     useEffect(() => {
         const fetchOglasi = async () => {
@@ -81,6 +86,41 @@ const AllOglas = () => {
         }
     };
 
+    const fetchOcene = async (oglasId) => {
+        try {
+            const data = await ocenaService.getOceneByOglas(oglasId);
+            setOcene(prevOcene => {
+                const updatedOcene = { ...prevOcene, [oglasId]: Array.isArray(data) ? data : [data] };
+                return updatedOcene;
+            });
+        } catch (error) {
+            setError('Failed to fetch ocene');
+        }
+    };
+
+    const handleAddOcena = async (oglasId) => {
+        const ocena = {
+            oglas: { idOglas: oglasId },
+            uporabnik: { idUporabnik: userId, ime: userIme, priimek: userPriimek },
+            vrednost: rating[oglasId]
+        };
+        try {
+            const addedOcena = await ocenaService.addOcena(ocena);
+            alert('Successfully added ocena');
+            setOcene(prevOcene => {
+                const updatedOcene = { ...prevOcene };
+                if (updatedOcene[oglasId]) {
+                    updatedOcene[oglasId].push(addedOcena);
+                } else {
+                    updatedOcene[oglasId] = [addedOcena];
+                }
+                return updatedOcene;
+            });
+        } catch (error) {
+            setError('Failed to add ocena');
+        }
+    };
+
     return (
         <div className="all-oglas-container">
             <h2>All Oglasi</h2>
@@ -137,9 +177,29 @@ const AllOglas = () => {
                                     max="5"
                                 />
                             </label>
+                            <button onClick={() => handleAddOcena(oglas.idOglas)}>Add Rating</button>
                         </div>
                         <button className="oglas-button" onClick={() => handleApply(oglas)}>Apply</button>
                         {isAdmin && <button className="oglas-button" onClick={() => handleDelete(oglas.idOglas)}>Delete</button>}
+                        <button onClick={() => fetchOcene(oglas.idOglas)}>Show Ratings</button>
+                        {(() => {
+                            if (Array.isArray(ocene[oglas.idOglas]) && ocene[oglas.idOglas].length > 0) {
+                                return (
+                                    <div>
+                                        <h4>Ratings:</h4>
+                                        <ul>
+                                            {ocene[oglas.idOglas].map(ocena => (
+                                                <li key={ocena.idOcena}>
+                                                    {ocena.vrednost} by {ocena.uporabnik.ime} {ocena.uporabnik.priimek}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                );
+                            } else {
+                                return <p>No ratings available</p>;
+                            }
+                        })()}
                     </div>
                 ))}
             </div>

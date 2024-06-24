@@ -20,12 +20,13 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
             "WHERE u.ime = :ime " +
             "AND o.vrednost = :vrednost " +
             "AND p.naziv LIKE %:naziv%")
-    List<Ocena> findByImeVrednostAndNaziv(String ime, int vrednost, String naziv);
+    List<Ocena> findByImeVrednostAndNaziv(@Param("ime") String ime, @Param("vrednost") int vrednost, @Param("naziv") String naziv);
 
-    @Transactional
     @Modifying
+    @Transactional
     @Query("DELETE FROM Ocena o WHERE o.oglas.idOglas = :oglasId")
-    void deleteByOglasId(@Param("oglasId") Long oglasId);
+    void deleteByOglasId(Long oglasId);
 
-
+    List<Ocena> findByOglasIdOglas(Long idOglas);
 }
+

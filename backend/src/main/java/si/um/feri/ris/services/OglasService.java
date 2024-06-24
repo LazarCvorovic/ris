@@ -66,6 +66,7 @@ public class OglasService {
         });
     }
 
+
     @Transactional
     public boolean deleteOglas(Long id) {
         if (oglasRepository.existsById(id)) {

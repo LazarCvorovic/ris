@@ -8,6 +8,7 @@ import si.um.feri.ris.services.OcenaService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/ocene")
 public class OcenaController {
@@ -15,13 +16,11 @@ public class OcenaController {
     @Autowired
     private OcenaService ocenaService;
 
-    // TX implementacija izpisa vseh zapisov (GET)
     @GetMapping
     public List<Ocena> getAllOcene() {
         return ocenaService.getAllOcene();
     }
 
-    // TX implementacija izpisa enega zapisa (GET - glede na ID)
     @GetMapping("/{id}")
     public ResponseEntity<Ocena> getOcenaById(@PathVariable Long id) {
         return ocenaService.getOcenaById(id)
@@ -29,13 +28,12 @@ public class OcenaController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TX dodajanje zapisa (POST)
     @PostMapping
-    public Ocena createOcena(@RequestBody Ocena ocena) {
-        return ocenaService.createOcena(ocena);
+    public ResponseEntity<Ocena> addOcena(@RequestBody Ocena ocena) {
+        Ocena novaOcena = ocenaService.addOcena(ocena);
+        return ResponseEntity.ok(novaOcena);
     }
 
-    // TX spreminjanje podatkov zapisa (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<Ocena> updateOcena(@PathVariable Long id, @RequestBody Ocena ocenaDetails) {
         return ocenaService.updateOcena(id, ocenaDetails)
@@ -43,7 +41,6 @@ public class OcenaController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TX brisanje podatkov zapisa (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOcena(@PathVariable Long id) {
         if (ocenaService.deleteOcena(id)) {
@@ -53,19 +50,13 @@ public class OcenaController {
         }
     }
 
-    // TX kompleksnejša poizvedba z dvema parametroma
     @GetMapping("/searchByAdresaAndVrednost")
     public List<Ocena> findByAdresaAndVrednost(@RequestParam String adresa, @RequestParam int vrednost) {
         return ocenaService.findByAdresaAndVrednost(adresa, vrednost);
     }
 
-    // 2.TX kompleksnejša poizvedba z tri modela
-    @GetMapping("/ocene")
-    public List<Ocena> getOcenas(@RequestParam String ime,
-                                 @RequestParam int vrednost,
-                                 @RequestParam String naziv) {
-        return ocenaService.getOcenasByImeVrednostAndNaziv(ime, vrednost, naziv);
+    @GetMapping("/oglas/{oglasId}")
+    public List<Ocena> getOceneByOglas(@PathVariable Long oglasId) {
+        return ocenaService.getOceneByOglas(oglasId);
     }
-
-
 }
