@@ -10,9 +10,14 @@ const getProfile = (email) => {
     return axios.get(`${API_URL}/email/${email}`);
 };
 
+const isAdmin = (email) => {
+    return axios.get(`${API_URL}/isAdmin/${email}`);
+};
+
 const uporabnikService = {
     login,
-    getProfile
+    getProfile,
+    isAdmin
 };
 
 export default uporabnikService;

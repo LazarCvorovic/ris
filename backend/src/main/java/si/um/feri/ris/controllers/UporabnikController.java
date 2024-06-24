@@ -22,13 +22,11 @@ public class UporabnikController {
     @Autowired
     private UporabnikService uporabnikService;
 
-    // TX implementacija izpisa vseh zapisov (GET)
     @GetMapping
     public List<Uporabnik> getAllUporabniki() {
         return uporabnikService.getAllUporabniki();
     }
 
-    // TX implementacija izpisa enega zapisa (GET - glede na ID)
     @GetMapping("/{id}")
     public ResponseEntity<Uporabnik> getUporabnikById(@PathVariable Long id) {
         return uporabnikService.getUporabnikById(id)
@@ -36,19 +34,16 @@ public class UporabnikController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TX dodajanje zapisa (POST)
     @PostMapping
     public Uporabnik createUporabnik(@RequestBody Uporabnik uporabnik) {
         return uporabnikService.createUporabnik(uporabnik);
     }
 
-    @CrossOrigin
     @PostMapping("/add")
     public Uporabnik addUporabnik(@RequestBody AddUporabnikRequest uporabnik) {
         return uporabnikService.save(uporabnik);
     }
 
-    // TX spreminjanje podatkov zapisa (PUT)
     @PutMapping("/{id}")
     public ResponseEntity<Uporabnik> updateUporabnik(@PathVariable Long id, @RequestBody Uporabnik uporabnikDetails) {
         return uporabnikService.updateUporabnik(id, uporabnikDetails)
@@ -56,7 +51,6 @@ public class UporabnikController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // TX brisanje podatkov zapisa (DELETE)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUporabnik(@PathVariable Long id) {
         if (uporabnikService.deleteUporabnik(id)) {
@@ -66,7 +60,6 @@ public class UporabnikController {
         }
     }
 
-    // TX kompleksnejša poizvedba z vsaj 3 parametri
     @GetMapping("/search")
     public List<Uporabnik> findByImeAndPriimekAndOglasavanje(@RequestParam String ime, @RequestParam String priimek, @RequestParam boolean oglasavanje) {
         return uporabnikService.findByImeAndPriimekAndOglasavanje(ime, priimek, oglasavanje);
@@ -101,7 +94,4 @@ public class UporabnikController {
         boolean isAdmin = uporabnikService.isAdmin(email);
         return ResponseEntity.ok(isAdmin);
     }
-
-
-
 }

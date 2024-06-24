@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import uporabnikService from '../services/uporabnikService'; // Dodali smo uvoz za uporabnikService
+import uporabnikService from '../services/uporabnikService';
 
 const Login = ({ onLogin }) => {
     const [email, setEmail] = useState('');
@@ -13,8 +13,9 @@ const Login = ({ onLogin }) => {
         try {
             const response = await uporabnikService.login(email, geslo);
             if (response.status === 200) {
+                localStorage.setItem('email', email);
                 onLogin();
-                navigate('/profile'); // Nakon uspešnog login-a prebacujemo na profil
+                navigate('/profile');
             } else {
                 setError('Login failed');
             }

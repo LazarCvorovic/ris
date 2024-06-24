@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import oglasService from '../services/oglasService';
+import uporabnikService from '../services/uporabnikService';
 import '../css/AllOglas.css';
 
 const AllOglas = () => {
@@ -12,6 +13,8 @@ const AllOglas = () => {
     });
     const [rating, setRating] = useState({});
     const [error, setError] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false);
+    const userEmail = localStorage.getItem('email');
 
     useEffect(() => {
         const fetchOglasi = async () => {
@@ -22,8 +25,21 @@ const AllOglas = () => {
                 setError('Failed to fetch oglasi');
             }
         };
+
+        const checkAdmin = async () => {
+            if (userEmail) {
+                try {
+                    const response = await uporabnikService.isAdmin(userEmail);
+                    setIsAdmin(response.data);
+                } catch (error) {
+                    setError('Failed to check admin status');
+                }
+            }
+        };
+
         fetchOglasi();
-    }, []);
+        checkAdmin();
+    }, [userEmail]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -52,6 +68,16 @@ const AllOglas = () => {
             alert('Successfully applied to oglas');
         } catch (error) {
             setError('Failed to apply to oglas');
+        }
+    };
+
+    const handleDelete = async (idOglas) => {
+        try {
+            await oglasService.deleteOglas(idOglas);
+            setOglasi(oglasi.filter(oglas => oglas.idOglas !== idOglas));
+            alert('Oglas deleted successfully');
+        } catch (error) {
+            setError('Failed to delete oglas');
         }
     };
 
@@ -113,6 +139,7 @@ const AllOglas = () => {
                             </label>
                         </div>
                         <button onClick={() => handleApply(oglas)}>Apply</button>
+                        {isAdmin && <button onClick={() => handleDelete(oglas.idOglas)}>Delete</button>}
                     </div>
                 ))}
             </div>

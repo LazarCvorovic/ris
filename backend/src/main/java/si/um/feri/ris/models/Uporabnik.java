@@ -1,7 +1,6 @@
 package si.um.feri.ris.models;
 
 import jakarta.persistence.*;
-import java.util.Collection;
 
 @Entity
 public class Uporabnik {
@@ -16,7 +15,7 @@ public class Uporabnik {
     private boolean oglasavanje;
     private String email;
     private String geslo;
-    private boolean isAdmin;  // Novo polje za administratorsku ulogu
+    private boolean isAdmin;
 
     public boolean isAdmin() {
         return isAdmin;
@@ -89,7 +88,4 @@ public class Uporabnik {
     public void setGeslo(String geslo) {
         this.geslo = geslo;
     }
-
-
 }
-

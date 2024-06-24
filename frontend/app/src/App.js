@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import CreateOglas from './components/CreateOglas';
@@ -9,9 +9,16 @@ import './App.css';
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('email'));
+    const navigate = useNavigate();
 
     const handleLogin = () => {
         setIsAuthenticated(true);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('email');
+        setIsAuthenticated(false);
+        navigate('/login');
     };
 
     return (
@@ -27,21 +34,31 @@ const App = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/">Home</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/login">Login</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/register">Register</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/create-oglas">Create Oglas</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/all-oglasi">All Oglasi</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/profile">Profile</Link>
-                            </li>
+                            {isAuthenticated ? (
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/create-oglas">Create Oglas</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/all-oglasi">All Oglasi</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/profile">Profile</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <button className="nav-link btn" onClick={handleLogout}>Logout</button>
+                                    </li>
+                                </>
+                            ) : (
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/login">Login</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/register">Register</Link>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                     </div>
                 </div>
@@ -50,8 +67,8 @@ const App = () => {
                 <Routes>
                     <Route path="/login" element={<Login onLogin={handleLogin} />} />
                     <Route path="/register" element={<Register />} />
-                    <Route path="/create-oglas" element={<CreateOglas />} />
-                    <Route path="/all-oglasi" element={<AllOglas />} />
+                    <Route path="/create-oglas" element={isAuthenticated ? <CreateOglas /> : <Navigate to="/login" />} />
+                    <Route path="/all-oglasi" element={isAuthenticated ? <AllOglas /> : <Navigate to="/login" />} />
                     <Route path="/profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
                     <Route path="/" element={<Home />} />
                 </Routes>
