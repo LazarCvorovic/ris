@@ -36,5 +36,7 @@ public interface OglasRepository extends JpaRepository<Oglas, Long> {
             "(:adresa IS NULL OR o.adresa = :adresa)")
     List<Oglas> findByFilters(@Param("regija") String regija, @Param("datumOd") LocalDate datumOd,
                               @Param("datumDo") LocalDate datumDo, @Param("adresa") String adresa);
+
+
 }
 

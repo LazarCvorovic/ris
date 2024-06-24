@@ -8,12 +8,14 @@ import com.itextpdf.text.pdf.PdfWriter;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import si.um.feri.ris.models.Oglas;
 import si.um.feri.ris.models.Uporabnik;
+import si.um.feri.ris.repositories.OcenaRepository;
 import si.um.feri.ris.repositories.OglasRepository;
 import si.um.feri.ris.repositories.UporabnikRepository;
 
@@ -29,6 +31,9 @@ public class OglasService {
 
     @Autowired
     private OglasRepository oglasRepository;
+
+    @Autowired
+    private OcenaRepository ocenaRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -61,14 +66,17 @@ public class OglasService {
         });
     }
 
+    @Transactional
     public boolean deleteOglas(Long id) {
         if (oglasRepository.existsById(id)) {
-            oglasRepository.deleteById(id);
+            ocenaRepository.deleteByOglasId(id); // Prvo obriši sve ocene povezane sa oglasom
+            oglasRepository.deleteById(id); // Zatim obriši oglas
             return true;
         } else {
             return false;
         }
     }
+
 
     public List<Oglas> findByRegijaAndDatumOdAfter(String regija, LocalDate datumOd) {
         return oglasRepository.findByRegijaAndDatumOdAfter(regija, datumOd);

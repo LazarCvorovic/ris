@@ -21,7 +21,19 @@ public class Ocena {
     @JoinColumn(name = "podjetje_idPodjetje")
     private Podjetje podjetje;
 
+    @ManyToOne
+    @JoinColumn(name = "oglas_id")
+    private Oglas oglas;
+
     // Getters and Setters
+
+    public Oglas getOglas() {
+        return oglas;
+    }
+
+    public void setOglas(Oglas oglas) {
+        this.oglas = oglas;
+    }
 
     public Long getIdOcena() {
         return idOcena;

@@ -73,3 +73,18 @@ button:hover {
     color: red;
     margin-bottom: 20px;
 }
+
+.oglas-item button {
+    margin-top: 10px;
+    margin-right: 10px; /* Dodata desna margina između dugmadi */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.oglas-item button:hover {
+    background-color: #0056b3;
+}

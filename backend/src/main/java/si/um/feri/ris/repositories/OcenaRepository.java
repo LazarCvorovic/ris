@@ -1,6 +1,8 @@
 package si.um.feri.ris.repositories;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import si.um.feri.ris.models.Ocena;
@@ -19,6 +21,11 @@ public interface OcenaRepository extends JpaRepository<Ocena, Long> {
             "AND o.vrednost = :vrednost " +
             "AND p.naziv LIKE %:naziv%")
     List<Ocena> findByImeVrednostAndNaziv(String ime, int vrednost, String naziv);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Ocena o WHERE o.oglas.idOglas = :oglasId")
+    void deleteByOglasId(@Param("oglasId") Long oglasId);
 
 
 }

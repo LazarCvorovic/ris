@@ -98,4 +98,6 @@ public class OglasController {
         LocalDate datumDoDate = datumDo != null ? LocalDate.parse(datumDo) : null;
         return oglasService.findByFilters(regija, datumOdDate, datumDoDate, adresa);
     }
+
+
 }

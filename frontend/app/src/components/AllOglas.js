@@ -138,8 +138,8 @@ const AllOglas = () => {
                                 />
                             </label>
                         </div>
-                        <button onClick={() => handleApply(oglas)}>Apply</button>
-                        {isAdmin && <button onClick={() => handleDelete(oglas.idOglas)}>Delete</button>}
+                        <button className="oglas-button" onClick={() => handleApply(oglas)}>Apply</button>
+                        {isAdmin && <button className="oglas-button" onClick={() => handleDelete(oglas.idOglas)}>Delete</button>}
                     </div>
                 ))}
             </div>

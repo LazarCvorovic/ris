@@ -35,9 +35,14 @@ const createOglasAndGeneratePdf = (oglas) => {
     return axios.post(`${API_URL}/pdf`, oglas);
 };
 
+const deleteOglas = (idOglas) => {
+    return axios.delete(`${API_URL}/${idOglas}`);
+};
+
 export default {
     getAllOglasi,
     findByFilters,
     applyToOglas,
-    createOglasAndGeneratePdf
+    createOglasAndGeneratePdf,
+    deleteOglas
 };
